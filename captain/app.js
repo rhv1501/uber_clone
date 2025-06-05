@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import errormiddleware from "./middlewares/errormiddleware.js";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import captainRoutes from "./routes/captain.routes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
@@ -21,6 +22,7 @@ app.get("/health", (req, res) => {
   });
 });
 app.use("/auth", authRoutes);
+app.use("/", captainRoutes);
 
 app.use(errormiddleware);
 

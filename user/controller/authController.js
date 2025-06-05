@@ -88,7 +88,6 @@ export const getUser = asyncHandler(async (req, res) => {
   const user = await userModal
     .findById(req.user)
     .select("-password")
-    .select("-_id")
     .select("-__v")
     .select("-createdAt")
     .select("-updatedAt");

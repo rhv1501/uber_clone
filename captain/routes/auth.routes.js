@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import {
-  getUser,
+  getCaptain,
   login,
   logout,
   signup,
@@ -11,6 +11,6 @@ import jwtveify from "../middlewares/jwtverify.js";
 router.post("/signup", signup);
 router.post("/login", login);
 router.get("/logout", jwtveify, logout);
-router.get("/", jwtveify, getUser);
+router.get("/", jwtveify, getCaptain);
 
 export default router;

@@ -19,6 +19,10 @@ const userSchema = new Schema(
       required: true,
       minlength: 6,
     },
+    isavailable: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

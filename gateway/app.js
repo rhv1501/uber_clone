@@ -5,7 +5,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(
   "/user",
-  expressproxy("http://localhost:3001", {
+  expressproxy("http://localhost:3001", { 
     proxyReqPathResolver: (req) => {
       console.log(
         `[PROXY] ${req.method} ${req.originalUrl} -> http://localhost:3001${req.url}`
@@ -26,6 +26,24 @@ app.use(
     proxyReqPathResolver: (req) => {
       console.log(
         `[PROXY] ${req.method} ${req.originalUrl} -> http://localhost:3002${req.url}`
+      );
+      return req.url;
+    },
+    userResDecorator: (proxyRes, proxyResData, req, res) => {
+      console.log(
+        `[PROXY-RES] ${req.method} ${req.originalUrl} - Status: ${proxyRes.statusCode}`
+      );
+      return proxyResData;
+    },
+  })
+);
+
+app.use(
+  "/ride",
+  expressproxy("http://localhost:3003", {
+  proxyReqPathResolver: (req) => {
+      console.log(
+        `[PROXY] ${req.method} ${req.originalUrl} -> http://localhost:3003${req.url}`
       );
       return req.url;
     },

@@ -84,19 +84,18 @@ export const logout = asyncHandler(async (req, res) => {
   });
 });
 
-export const getUser = asyncHandler(async (req, res) => {
-  const user = await captainModel
+export const getCaptain = asyncHandler(async (req, res) => {
+  const captain = await captainModel
     .findById(req.user)
     .select("-password")
-    .select("-_id")
     .select("-__v")
     .select("-createdAt")
     .select("-updatedAt");
-  if (!user) {
+  if (!captain) {
     throw error(404, "captain not found");
   }
   res.status(200).json({
     message: "captain retrieved successfully",
-    user,
+    captain,
   });
 });
