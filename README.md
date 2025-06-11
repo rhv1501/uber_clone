@@ -102,14 +102,15 @@ Each service requires a `.env` file with the following variables:
 
 - `MONGO_URL` — 🗄️ MongoDB connection string
 - `JWT_SECRET` — 🔑 Secret for JWT signing
-- `RABBIT_URL` — 🐇 RabbitMQ connection string (for ride and captain services)
+- `RABBIT_URL` — 🐇 RabbitMQ connection string (for ride, user and captain services)
 - `GATEWAY_URL` — 🌐 Gateway service URL (for ride service)
 
 ---
 
 # 📝 Message Queue Events
 
-- **newRide**: Published by ride service when a new ride is created. Consumed by captain service for real-time ride assignment.
+- **newRide**: Published by the ride service when a new ride is created. Consumed by the captain service for real-time ride assignment.
+- **acceptRide**: Published by the ride service when a captain accepts a ride. Consumed by the user service for real-time ride acceptance updates.
 
 ---
 
