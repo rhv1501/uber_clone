@@ -1,0 +1,115 @@
+version: "3.8"
+
+services:
+  user-mongo:
+    image: mongo:6.0
+    container_name: user-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - user-mongo-data:/data/db
+
+  captain-mongo:
+    image: mongo:6.0
+    container_name: captain-mongo
+    restart: always
+    ports:
+      - "27018:27017"
+    volumes:
+      - captain-mongo-data:/data/db
+
+  ride-mongo:
+    image: mongo:6.0
+    container_name: ride-mongo
+    restart: always
+    ports:
+      - "27019:27017"
+    volumes:
+      - ride-mongo-data:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  user:
+    build: ./user
+    container_name: user-service
+    restart: always
+    depends_on:
+      - user-mongo
+      - rabbitmq
+    environment:
+      - MONGO_URL=mongodb://user-mongo:27017/userdb
+      - JWT_SECRET=supersecretuser
+      - RABBIT_URL=amqp://guest:guest@rabbitmq:5672
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./user:/app
+    working_dir: /app
+    command: ["npm", "start"]
+
+  captain:
+    build: ./captain
+    container_name: captain-service
+    restart: always
+    depends_on:
+      - captain-mongo
+      - rabbitmq
+    environment:
+      - MONGO_URL=mongodb://captain-mongo:27017/captaindb
+      - JWT_SECRET=supersecretcaptain
+      - RABBIT_URL=amqp://guest:guest@rabbitmq:5672
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./captain:/app
+    working_dir: /app
+    command: ["npm", "start"]
+
+  ride:
+    build: ./ride
+    container_name: ride-service
+    restart: always
+    depends_on:
+      - ride-mongo
+      - rabbitmq
+    environment:
+      - MONGO_URL=mongodb://ride-mongo:27017/ridedb
+      - JWT_SECRET=supersecretride
+      - RABBIT_URL=amqp://guest:guest@rabbitmq:5672
+      - GATEWAY_URL=http://gateway:3000
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./ride:/app
+    working_dir: /app
+    command: ["npm", "start"]
+
+  gateway:
+    build: ./gateway
+    container_name: gateway-service
+    restart: always
+    depends_on:
+      - user
+      - captain
+      - ride
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./gateway:/app
+    working_dir: /app
+    command: ["npm", "start"]
+
+volumes:
+  user-mongo-data:
+  captain-mongo-data:
+  ride-mongo-data:

@@ -4,9 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "user": "nodemon ../user/server.js",
     "gateway": "nodemon server.js",
-    "captain":"nodemon ../captain/server.js",
+    "captain": "nodemon ../captain/server.js",
     "server": "npm-run-all --parallel user gateway captain",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

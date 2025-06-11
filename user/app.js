@@ -1,5 +1,6 @@
 import express from "express";
 import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
 import errormiddleware from "./middlewares/errormiddleware.js";
 import dotenv from "dotenv";
@@ -21,6 +22,7 @@ app.get("/health", (req, res) => {
   });
 });
 app.use("/auth", authRoutes);
+app.use("/", userRoutes);
 
 app.use(errormiddleware);
 
